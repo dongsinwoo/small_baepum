@@ -12,7 +12,6 @@
 ## 🛠 기술 스택
 ### Frontend
 - React
-- TypeScript
 - Styled-Components
 
 ### Backend

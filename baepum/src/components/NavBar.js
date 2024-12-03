@@ -12,7 +12,7 @@ function NavBar() {
                 <NavText>홈</NavText>
             </NavItem>
             
-            <CentralNavItem onClick={() => navigate('/')}>
+            <CentralNavItem onClick={() => navigate('/payment')}>
                 <FaEnvelope size={28} />
             </CentralNavItem>
             

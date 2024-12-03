@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { User, Bookmark, ChevronRight } from 'lucide-react';
+import { User, Trash2 } from 'lucide-react';
+import { auth } from '../firebase';
+import { signOut } from 'firebase/auth';
+import { getSavedQuotes, deleteQuote } from '../api/quoteService';
 
 const PageContainer = styled.div`
   display: flex;
@@ -19,6 +22,7 @@ const MainContent = styled.main`
 `;
 
 const ProfileSection = styled.section`
+  position: relative;
   background-color: #F5E6D3;
   border-radius: 16px;
   padding: 24px;
@@ -122,54 +126,120 @@ const ActionButton = styled.button`
   }
 `;
 
+const LogoutText = styled.button`
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  background: none;
+  border: none;
+  color: #433422;
+  font-size: 0.8rem;
+  cursor: pointer;
+  opacity: 0.7;
+  
+  &:hover {
+    opacity: 1;
+  }
+`;
 
+const DeleteButton = styled.button`
+  background: none;
+  border: none;
+  color: #433422;
+  cursor: pointer;
+  padding: 4px;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 1;
+  }
+`;
 
 export default function MyScreen() {
-  const [savedQuotes] = useState([
-    {
-      id: 1,
-      text: "사람은 행복하려고 마음먹은 만큼 행복해질 수 있다.",
-      author: "아브라함 링컨"
-    },
-    {
-      id: 2,
-      text: "진정으로 웃으려면 고통을 참아야하며, 나아가 고통을 즐길 줄 알아야 해.",
-      author: "찰리 채플린"
-    },
-  ]);
+  const user = auth.currentUser;
+  const [savedQuotes, setSavedQuotes] = useState([]);
+
+  useEffect(() => {
+    if (user) {
+      loadSavedQuotes();
+    }
+  }, [user]);
+
+  const loadSavedQuotes = async () => {
+    try {
+      const quotes = await getSavedQuotes(user.uid);
+      setSavedQuotes(quotes);
+    } catch (error) {
+      console.error('명언 불러오기 실패:', error);
+    }
+  };
+
+  const handleDelete = async (quoteId) => {
+    try {
+      await deleteQuote(quoteId);
+      setSavedQuotes(savedQuotes.filter(quote => quote.id !== quoteId));
+      alert('명언이 삭제되었습니다.');
+    } catch (error) {
+      console.error('명언 삭제 실패:', error);
+      alert('명언 삭제에 실패했습니다.');
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      alert('로그아웃 실패: ' + error.message);
+    }
+  };
 
   return (
     <PageContainer>
       <MainContent>
-        <ProfileSection>
+         <ProfileSection>
+          <LogoutText onClick={handleLogout}>로그아웃</LogoutText>
           <ProfileInfo>
             <Avatar>
-              <User size={30} color="#433422" />
+              {user?.photoURL ? (
+                <img 
+                  src={user.photoURL} 
+                  alt="프로필" 
+                  style={{ 
+                    width: '100%', 
+                    height: '100%', 
+                    borderRadius: '50%',
+                    objectFit: 'cover'
+                  }} 
+                />
+              ) : (
+                <User size={30} color="#433422" />
+              )}
             </Avatar>
             <div>
-              <UserName>사용자님</UserName>
-              <UserEmail>user@example.com</UserEmail>
+              <UserName>{user?.displayName || '사용자'}</UserName>
+              <UserEmail>{user?.email || ''}</UserEmail>
             </div>
           </ProfileInfo>
         </ProfileSection>
 
         <QuotesSection>
           <h3>저장된 명언</h3>
-          {savedQuotes.map((quote) => (
-            <QuoteCard key={quote.id}>
-              <QuoteText>{quote.text}</QuoteText>
-              <QuoteAuthor>- {quote.author}</QuoteAuthor>
-              <QuoteActions>
-                <ActionButton>
-                  <Bookmark size={16} />
-                  저장됨
-                </ActionButton>
-                <ActionButton>
-                  공유 <ChevronRight size={16} />
-                </ActionButton>
-              </QuoteActions>
-            </QuoteCard>
-          ))}
+          {savedQuotes.length === 0 ? (
+            <p>저장된 명언이 없습니다.</p>
+          ) : (
+            savedQuotes.map((quote) => (
+              <QuoteCard key={quote.id}>
+                <QuoteText>{quote.text}</QuoteText>
+                <QuoteAuthor>- {quote.author}</QuoteAuthor>
+                <QuoteActions>
+                  <DeleteButton onClick={() => handleDelete(quote.id)}>
+                    <Trash2 size={16} />
+                  </DeleteButton>
+                </QuoteActions>
+              </QuoteCard>
+            ))
+          )}
         </QuotesSection>
       </MainContent>
     </PageContainer>

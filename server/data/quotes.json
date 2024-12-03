@@ -1,0 +1,42 @@
+[
+  {
+    "id": "1733199663556",
+    "userId": "f87tje1mmtZhr49qhmBwpM8dQJH2",
+    "text": "나는 특별한 재능이 있는 것이 아니다. 단지 열정적으로 호기심을 가질 뿐이다.",
+    "author": "앨버트 아인슈타인",
+    "authorProfile": "이론 물리학자",
+    "createdAt": "2024-12-03T04:21:03.556Z"
+  },
+  {
+    "id": "1733199809006",
+    "userId": "f87tje1mmtZhr49qhmBwpM8dQJH2",
+    "text": "인생이란 결코 공평하지 않다. 이 사실에 익숙해져라.",
+    "author": "빌 게이츠",
+    "authorProfile": "마이크로소프트 창업자",
+    "createdAt": "2024-12-03T04:23:29.006Z"
+  },
+  {
+    "id": "1733199811928",
+    "userId": "f87tje1mmtZhr49qhmBwpM8dQJH2",
+    "text": "자신감 있는 표정을 지으면 자신감이 생긴다.",
+    "author": "찰스 다윈",
+    "authorProfile": "생물 학자, <종의 기원>의 저자",
+    "createdAt": "2024-12-03T04:23:31.928Z"
+  },
+  {
+    "id": "1733199815829",
+    "userId": "f87tje1mmtZhr49qhmBwpM8dQJH2",
+    "text": "늘 갈망하고 우직하게 나아가라.",
+    "author": "스티브 잡스",
+    "authorProfile": "애플 창업자",
+    "createdAt": "2024-12-03T04:23:35.829Z"
+  },
+  {
+    "id": "1733199993393",
+    "userId": "f87tje1mmtZhr49qhmBwpM8dQJH2",
+    "text": "나를 죽이지 못하는 고통은 나를 더 강하게 만든다.",
+    "author": "프리드리히 니체",
+    "authorProfile": "독일 철학자",
+    "createdAt": "2024-12-03T04:26:33.393Z"
+  }
+]
